@@ -11,7 +11,7 @@ class gameTable():
         return s
     
     def getElement(self, row: int, column: int) -> int:
-        return self.table[i][j]
+        return self.table[row][column]
     
     def dropElement(self, number: int, column: int) -> None:
         if column < 0 or column > 6:

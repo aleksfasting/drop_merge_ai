@@ -22,7 +22,7 @@ class Node():
 
     def addOut(self, node) -> None:
         """Adds an out to the node."""
-        self.outs.append(Edge(node, 0))
+        self.outs.append(Edge(node, 1))
 
     def getValue(self) -> int:
         """Getter for the value of the node."""
@@ -35,7 +35,11 @@ class Node():
     def getOuts(self) -> list[Edge]:
         """Getter for the outs of the node."""
         return self.outs
-
+    
+    def pushValue(self) -> None:
+        """Pushes the value of the node to the outs. This function assumes the output node been reset since last use"""
+        for edge in self.outs:
+            edge.getNode().setValue(edge.getNode().getValue() + self.getValue() * edge.getWeight())
 
 
 class NeuralNetwork():
@@ -47,8 +51,8 @@ class NeuralNetwork():
         self.layers = hiddenLayers
         self.nodesInLayer = nodesInLayer
         self.inputLayer = []
-        self.hiddenLayer = []
-        self.outputLayers = [[] for i in range(self.nodesInLayer)]
+        self.hiddenLayer = [[] for i in range(self.layers)]
+        self.outputLayer = []
 
     def addInputLayer(self):
         """Adds the input layer to the network. Cannot be called before addHiddenLayer() is called."""
@@ -63,7 +67,7 @@ class NeuralNetwork():
         for i in range(self.nodesInLayer):
             self.hiddenLayer[layer].append(Node())
             self.hiddenLayer[layer][i].setValue(0)
-            if layer == self.nodesInLayer - 1:
+            if layer == self.layers - 1:
                 for j in range(self.outputs):
                     self.hiddenLayer[layer][i].addOut(self.outputLayer[j])
             else:
@@ -75,3 +79,67 @@ class NeuralNetwork():
         for i in range(self.outputs):
             self.outputLayer.append(Node())
             self.outputLayer[i].setValue(0)
+
+    def setInputLayer(self, inputs: list[int]) -> None:
+        """Pushes the inputs to the hidden layer."""
+        for i in range(self.inputs):
+            self.inputLayer[i].setValue(inputs[i])
+
+    def pushInputLayer(self) -> None:
+        """Pushes the input layer to the hidden layer."""
+        for node in self.inputLayer:
+            node.pushValue()
+
+    def pushHiddenLayer(self, layer: int) -> None:
+        """Pushes the hidden layer to the next hidden layer."""
+        for node in self.hiddenLayer[layer]:
+            node.pushValue()
+
+    def getMaxOutput(self) -> int:
+        """Returns the index of the output node with the highest value."""
+        maxIndex = 0
+        for i in range(self.outputs):
+            if self.outputLayer[i].getValue() > self.outputLayer[max].getValue():
+                maxIndex = i
+        return maxIndex
+    
+    def __str__(self):
+        """tostring method for the neural network"""
+        s = ''
+        s += 'Input layer:\n'
+        for node in self.inputLayer:
+            s += str(node.getValue()) + ' '
+        s += '\n'
+        for i in range(self.layers):
+            s += 'Hidden layer ' + str(i) + ':\n'
+            for node in self.hiddenLayer[i]:
+                s += str(node.getValue()) + ' '
+            s += '\n'
+        s += 'Output layer:\n'
+        for node in self.outputLayer:
+            s += str(node.getValue()) + ' '
+        s += '\n'
+        return s
+    
+    def createNetwork(self) -> None:
+        """Adds layers to the network."""
+        self.addOutputLayer()
+        for i in range(self.layers-1, -1, -1):
+            self.addHiddenLayer(i)
+        self.addInputLayer()
+
+    def pushNetwork(self) -> None:
+        """Pushes the network."""
+        self.pushInputLayer()
+        for i in range(self.layers):
+            self.pushHiddenLayer(i)
+
+def main():
+    nn = NeuralNetwork(7, 2, 10, 7)
+    nn.createNetwork()
+    nn.setInputLayer([1, 2, 3, 4, 5, 6, 7])
+    nn.pushNetwork()
+    print(nn)
+
+if __name__ == '__main__':
+    main()

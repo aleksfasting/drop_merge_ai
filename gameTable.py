@@ -119,12 +119,14 @@ class gameTable():
             self.dropColumn(column - 1)
             for i in range(6):
                 self.mergeLoop(i, column - 1)
+                self.mergeLoop(i, column)
             return
         if ret == 3:
             self.mergeElements(row, column, row, column + 1)
             self.dropColumn(column + 1)
             for i in range(6):
                 self.mergeLoop(i, column + 1)
+                self.mergeLoop(i, column)
             return
         
 

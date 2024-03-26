@@ -9,7 +9,14 @@ class gameTable():
         """tostring method for the table"""
         s = ''
         for row in self.table:
-            s += str(row) + '\n'
+            s += '|'
+            for element in row:
+                el = str(element)
+                for i in range(4 - len(el)):
+                    s += ' '
+                s += el
+                s += '|'
+            s += '\n'
         return s
     
     def getElement(self, row: int, column: int) -> int:

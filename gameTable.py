@@ -14,7 +14,13 @@ class gameTable():
         return self.table[i][j]
     
     def dropElement(self, number: int, column: int) -> None:
-        for i in range(6, -1, -1):
+        if column < 0 or column > 6:
+            raise Exception('Invalid column')
+        if self.table[6][column] != 0:
+            raise Exception('Column is full')
+        for i in range(5, -1, -1):
             if self.table[i][column] != 0:
                 self.table[i+1][column] = number
                 return
+        self.table[0][column] = number
+        

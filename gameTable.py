@@ -12,3 +12,9 @@ class gameTable():
     
     def getElement(self, i: int, j: int) -> int:
         return self.table[i][j]
+    
+    def dropElement(self, number: int, column: int) -> None:
+        for i in range(6, -1, -1):
+            if self.table[i][column] != 0:
+                self.table[i+1][column] = number
+                return

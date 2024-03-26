@@ -128,21 +128,3 @@ class gameTable():
                 self.mergeLoop(i, column + 1)
                 self.mergeLoop(i, column)
             return
-        
-
-
-# Test
-t = gameTable()
-while True: 
-    print(t)
-
-    col = input("Enter column: ")
-
-    if col == 'q':
-        break
-
-    t.dropElement(2, int(col))
-    for i in range(6):
-        t.mergeLoop(i, int(col))
-
-        

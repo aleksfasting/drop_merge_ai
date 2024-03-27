@@ -23,3 +23,10 @@ class gameLoop():
             for i in range(6):
                 self.table.mergeLoop(i, column)
             print(self.table)
+
+    def loopAI(self, column: int, number: int) -> gameTable:
+        """Main loop for the game with AI"""
+        self.table.dropElement(number, column)
+        for i in range(6):
+            self.table.mergeLoop(i, column)
+        return self.table

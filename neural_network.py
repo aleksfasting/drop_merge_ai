@@ -1,12 +1,12 @@
 class Edge():
-    def __init__(self, node, w: int) -> None:
+    def __init__(self, node, w: float) -> None:
         self.weight = w
         self.node = node
     
-    def getWeight(self) -> int:
+    def getWeight(self) -> float:
         return self.weight
     
-    def setWeight(self, w: int) -> None:
+    def setWeight(self, w: float) -> None:
         self.weight = w
     
     def getNode(self):
@@ -22,13 +22,13 @@ class Node():
 
     def addOut(self, node) -> None:
         """Adds an out to the node."""
-        self.outs.append(Edge(node, 1))
+        self.outs.append(Edge(node, 0.1))
 
-    def getValue(self) -> int:
+    def getValue(self) -> float:
         """Getter for the value of the node."""
         return self.value
     
-    def setValue(self, value) -> None:
+    def setValue(self, value: float) -> None:
         """Setter for the value of the node."""
         self.value = value
 
@@ -80,7 +80,7 @@ class NeuralNetwork():
             self.outputLayer.append(Node())
             self.outputLayer[i].setValue(0)
 
-    def setInputLayer(self, inputs: list[int]) -> None:
+    def setInputLayer(self, inputs: list[float]) -> None:
         """Pushes the inputs to the hidden layer."""
         for i in range(self.inputs):
             self.inputLayer[i].setValue(inputs[i])
@@ -95,7 +95,7 @@ class NeuralNetwork():
         for node in self.hiddenLayer[layer]:
             node.pushValue()
 
-    def getMaxOutput(self) -> int:
+    def getMaxOutput(self) -> float:
         """Returns the index of the output node with the highest value."""
         maxIndex = 0
         for i in range(self.outputs):
@@ -134,10 +134,24 @@ class NeuralNetwork():
         for i in range(self.layers):
             self.pushHiddenLayer(i)
 
+    def setWeights(self, weights: list[list[float]]) -> None:
+        """Sets the weights of the network."""
+        inputWeights = weights[0]
+        for i in range(self.inputs):
+            for j in range(self.nodesInLayer):
+                self.inputLayer[i].getOuts()[j].setWeight(inputWeights[j])
+
+        hiddenWeights = weights[1:self.layers+1]
+        for i in range(self.layers):
+            for j in range(self.nodesInLayer):
+                for k in range(self.nodesInLayer):
+                    self.hiddenLayer[i][j].getOuts()[k].setWeight(hiddenWeights[i][k])
+
+
 def main():
-    nn = NeuralNetwork(7, 2, 10, 7)
+    nn = NeuralNetwork(49, 2, 49, 49)
     nn.createNetwork()
-    nn.setInputLayer([1, 2, 3, 4, 5, 6, 7])
+    nn.setInputLayer([1, 2, 3, 4, 5, 6, 7] * 7)
     nn.pushNetwork()
     print(nn)
 

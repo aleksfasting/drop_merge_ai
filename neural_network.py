@@ -22,7 +22,7 @@ class Node():
 
     def addOut(self, node) -> None:
         """Adds an out to the node."""
-        self.outs.append(Edge(node, 0.1))
+        self.outs.append(Edge(node, 0))
 
     def getValue(self) -> float:
         """Getter for the value of the node."""
@@ -99,7 +99,7 @@ class NeuralNetwork():
         """Returns the index of the output node with the highest value."""
         maxIndex = 0
         for i in range(self.outputs):
-            if self.outputLayer[i].getValue() > self.outputLayer[max].getValue():
+            if self.outputLayer[i].getValue() > self.outputLayer[maxIndex].getValue():
                 maxIndex = i
         return maxIndex
     
@@ -149,7 +149,7 @@ class NeuralNetwork():
 
 
 def main():
-    nn = NeuralNetwork(49, 2, 49, 49)
+    nn = NeuralNetwork(49, 2, 49, 7)
     nn.createNetwork()
     nn.setInputLayer([1, 2, 3, 4, 5, 6, 7] * 7)
     nn.pushNetwork()

@@ -26,7 +26,12 @@ class gameLoop():
 
     def loopAI(self, column: int, number: int) -> gameTable:
         """Main loop for the game with AI"""
-        self.table.dropElement(number, column)
-        for i in range(6):
-            self.table.mergeLoop(i, column)
+        try:
+            self.table.dropElement(number, column)
+            for i in range(6):
+                self.table.mergeLoop(i, column)
+        except Exception as e:
+            if str(e) == 'Column is full':
+                return False
+            print(e)
         return self.table
